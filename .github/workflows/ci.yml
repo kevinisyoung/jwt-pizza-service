@@ -109,11 +109,11 @@ jobs:
             - name: Create OIDC token to AWS
               uses: aws-actions/configure-aws-credentials@v4
               with:
-              
+                role-session-name: GitHubActions
                 audience: sts.amazonaws.com
                 aws-region: us-east-1
                 role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/${{ secrets.CI_IAM_ROLE }}
-              
+
             - name: Print progress
               run: echo "Creating OIDC token to AWS..."
 
