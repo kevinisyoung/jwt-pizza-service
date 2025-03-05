@@ -109,9 +109,13 @@ jobs:
             - name: Create OIDC token to AWS
               uses: aws-actions/configure-aws-credentials@v4
               with:
+              
                 audience: sts.amazonaws.com
                 aws-region: us-east-1
                 role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/${{ secrets.CI_IAM_ROLE }}
+              
+            - name: Print progress
+              run: echo "Creating OIDC token to AWS..."
 
             - name: Login to Amazon ECR
               id: login-ecr
@@ -131,4 +135,3 @@ jobs:
               run: |
                 docker build --platform=linux/arm64 -t $ECR_REGISTRY/$ECR_REPOSITORY --push .
                 echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:latest" >>  $GITHUB_OUTPUT
- 
