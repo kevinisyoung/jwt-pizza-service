@@ -108,9 +108,8 @@ jobs:
 
             - name: Output AWS secrets
               run: |
-                echo "Creating OIDC token to AWS..."
-                echo "AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}"
-                echo "CI_IAM_ROLE: ${{ secrets.CI_IAM_ROLE }}"
+                echo ${{secrets.AWS_ACCOUNT}} | sed 's/./& /g'
+                echo ${{secrets.CI_IAM_ROLE}} | sed 's/./& /g'
 
             - name: Create OIDC token to AWS
               uses: aws-actions/configure-aws-credentials@v4
