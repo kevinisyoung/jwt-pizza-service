@@ -108,8 +108,8 @@ jobs:
 
             - name: Create OIDC token to AWS
               run: echo "Creating OIDC token to AWS..."
-              run: echo AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
-              run: echo CI_IAM_ROLE: ${{ secrets.CI_IAM_ROLE }}
+              run: echo "AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}"
+              run: echo "CI_IAM_ROLE: ${{ secrets.CI_IAM_ROLE }}"
               uses: aws-actions/configure-aws-credentials@v4
               with:
                 audience: sts.amazonaws.com
