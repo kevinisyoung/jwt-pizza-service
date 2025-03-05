@@ -120,6 +120,7 @@ jobs:
               
             - name: Print progress
               run: echo "Creating OIDC token to AWS..."
+              
 
             - name: Login to Amazon ECR
               id: login-ecr
