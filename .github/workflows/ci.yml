@@ -107,9 +107,11 @@ jobs:
                 name: package
 
             - name: Create OIDC token to AWS
+              run: echo "Creating OIDC token to AWS..."
+              run: echo AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
+              run: echo CI_IAM_ROLE: ${{ secrets.CI_IAM_ROLE }}
               uses: aws-actions/configure-aws-credentials@v4
               with:
-                role-session-name: GitHubActions
                 audience: sts.amazonaws.com
                 aws-region: us-east-1
                 role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/${{ secrets.CI_IAM_ROLE }}
