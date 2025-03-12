@@ -16,7 +16,7 @@ jobs:
                 image: mysql:8.0.29
                 env:
                     MYSQL_ROOT_PASSWORD: tempdbpassword
-                    MYSQL_DATABASE: ${{ secrets.MYSQL_DB }}
+                    MYSQL_DATABASE: pizza
                 ports:
                     - "3306:3306"
                 options: >-
@@ -44,20 +44,20 @@ jobs:
             - name: Write config file
               run: |
                   echo "export default {
-                    jwtSecret: '${{ secrets.JWT_SECRET }}',
+                    jwtSecret: 'poopbeans',
                     db: {
                       connection: {
                         host: '127.0.0.1',
                         user: 'root',
                         password: 'tempdbpassword',
-                        database: '${{ secrets.MYSQL_DB }}',
+                        database: 'pizza',
                         connectTimeout: 60000,
                       },
                       listPerPage: 10,
                     },
                     factory: {
                       url: 'https://pizza-factory.cs329.click',
-                      apiKey: '${{ secrets.FACTORY_API_KEY }}',
+                      apiKey: '2700c77513fd4429b8b442edbf983d2c',
                     },
                   };" > src/config.js
 
