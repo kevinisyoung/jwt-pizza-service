@@ -124,7 +124,7 @@ jobs:
             - name: Login to Amazon ECR
               id: login-ecr
               uses: aws-actions/amazon-ecr-login@v2
-              
+
 
             - name: Set up machine emulation
               uses: docker/setup-qemu-action@v3
@@ -140,3 +140,8 @@ jobs:
               run: |
                 docker build --platform=linux/arm64 -t $ECR_REGISTRY/$ECR_REPOSITORY --push .
                 echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:latest" >>  $GITHUB_OUTPUT
+
+            - name: Deploy new container
+              run: |
+                aws ecs update-service --cluster jwt-pizza-service --service jwt-pizza-service --force-new-deployment
+              
