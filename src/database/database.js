@@ -319,7 +319,7 @@ class DB {
 
   async initializeDatabase() {
     try {
-      console.log('config.js:', config)
+      console.log('config.js:', JSON.stringify(config, null, 2));
       const connection = await this._getConnection(false);
       try {
         const dbExists = await this.checkDatabaseExists(connection);
