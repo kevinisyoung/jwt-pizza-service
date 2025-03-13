@@ -320,9 +320,13 @@ class DB {
   async initializeDatabase() {
     try {
       console.log('config.js:', JSON.stringify(config, null, 2));
+      console.log("Before connection")
       const connection = await this._getConnection(false);
+      console.log("After connection")
       try {
+        console.log("Before checkDatabaseExists")
         const dbExists = await this.checkDatabaseExists(connection);
+        console.log("After checkDatabaseExists")
         console.log(dbExists ? 'Database exists' : 'Database does not exist, creating it');
 
         await connection.query(`CREATE DATABASE IF NOT EXISTS ${config.db.connection.database}`);
