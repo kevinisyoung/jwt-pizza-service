@@ -344,6 +344,15 @@ class DB {
         connection.end();
       }
     } catch (err) {
+      console.log("Aight we got here")
+      console.log("config.db", config.db)
+      console.log("config.db.connection", config.db.connection)
+      console.log("config.db.connection.password", config.db.connection.password)
+      console.log("config.db.connection.database", config.db.connection.database)
+      console.log("config.db.connection.host", config.db.connection.host)
+      console.log("config.db.connection.user", config.db.connection.user)
+      console.log("config.db.connection.connectTimeout", config.db.connection.connectTimeout)
+      console.log("config.db.connection.decimalNumbers", config.db.connection.decimalNumbers)
       console.error(JSON.stringify({ message: 'Error initializing database', exception: err.message, connection: config.db.connection }));
     }
   }
