@@ -1,6 +1,8 @@
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
-const config = require('../config.js');
+const configImport = require('../config.js');
+// Handle both ES module (with default) and CommonJS formats
+const config = configImport.__esModule ? configImport.default : configImport;
 const { StatusCodeError } = require('../endpointHelper.js');
 const { Role } = require('../model/model.js');
 const dbModel = require('./dbModel.js');
