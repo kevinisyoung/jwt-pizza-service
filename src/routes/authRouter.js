@@ -1,6 +1,8 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const config = require('../config.js');
+const configImport = require('../config.js');
+// Handle both ES module (with default) and CommonJS formats
+const config = configImport.__esModule ? configImport.default : configImport;
 const { asyncHandler } = require('../endpointHelper.js');
 const { DB, Role } = require('../database/database.js');
 

@@ -1,5 +1,7 @@
 const express = require('express');
-const config = require('../config.js');
+const configImport = require('../config.js');
+// Handle both ES module (with default) and CommonJS formats
+const config = configImport.__esModule ? configImport.default : configImport;
 const { Role, DB } = require('../database/database.js');
 const { authRouter } = require('./authRouter.js');
 const { asyncHandler, StatusCodeError } = require('../endpointHelper.js');
