@@ -1,6 +1,10 @@
 const os = require('os');
 
-const config = require('../config');
+
+const configImport = require('../config.js');
+const config = configImport.__esModule ? configImport.default : configImport;
+
+
 const { url, apiKey } = config.metrics;
 
 let requests = 0;

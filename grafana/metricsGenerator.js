@@ -1,4 +1,5 @@
-const { url, apiKey } = require('./config');
+const configImport = require('./config.js');
+const config = configImport.__esModule ? configImport.default : configImport;
 
 let requests = 0;
 let latency = 0;
