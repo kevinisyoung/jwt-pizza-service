@@ -63,12 +63,12 @@ jobs:
                     },
                     factory: {
                       url: 'https://pizza-factory.cs329.click',
-                      apiKey: '${{ secrets.FACTORY_API_KEY }}',
+                      apiKey: '2700c77513fd4429b8b442edbf983d2c',
                     },
                     metrics: {
                       source: 'jwt-pizza-service',
-                      url: '${{ secrets.METRICS_URL }}',
-                      apiKey: '${{ secrets.METRICS_API_KEY }}',
+                      url: 'https://otlp-gateway-prod-us-west-0.grafana.net/otlp/v1/metrics',
+                      apiKey: '1196765:glc_eyJvIjoiMTM3MzIwMiIsIm4iOiJzdGFjay0xMTk2NzY1LWludGVncmF0aW9uLWp3dC1waXp6YS1tZXRyaWNzIiwiayI6IkM0cUw3MnExRjgzWDk0RUFzcWVVZjlVOCIsIm0iOnsiciI6InByb2QtdXMtd2VzdC0wIn19',
                     },
                   };" > src/config.js
 
