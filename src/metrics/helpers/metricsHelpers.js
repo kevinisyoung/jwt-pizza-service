@@ -1,4 +1,7 @@
-const config = require("../../config");
+const configImport = require("../../config");
+// Handle both ES module (with default) and CommonJS formats
+const config = configImport.__esModule ? configImport.default : configImport;
+
 
 const sourceAttribute = {
   key: "source",
