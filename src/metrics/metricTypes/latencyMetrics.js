@@ -24,6 +24,7 @@ const trackLatency = (req, res, next) => {
 };
 
 const getLatencyMetrics = () => {
+  console.log("within getLatencyMetrics")
   if (!latencies.length) return { metrics: [] };
 
   const metrics = {

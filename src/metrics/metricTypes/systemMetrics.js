@@ -15,6 +15,7 @@ function getMemoryUsagePercentage() {
 }
 
 const getSystemMetrics = () => {
+  console.log("within getSystemMetrics");
   return {
     metrics: [
       { name: "cpu", value: getCpuUsagePercentage() },

@@ -2,6 +2,7 @@ const { DB } = require("../../database/database");
 const { sourceAttribute } = require("../helpers/metricsHelpers");
 
 const getActiveUserMetrics = async () => {
+  console.log("within getActiveUserMetrics")
   return {
     metrics: [
       {

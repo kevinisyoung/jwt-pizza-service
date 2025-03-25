@@ -14,6 +14,7 @@ const trackAuthFail = () => {
 };
 
 const getAuthMetrics = () => {
+  console.log("within getAuthMetrics")
   return {
     metrics: Object.entries(attempts).map(([status, value]) => ({
       name: "auth_attempts",
