@@ -5,6 +5,10 @@ const config = configImport.__esModule ? configImport.default : configImport;
 const { Role, DB } = require('../database/database.js');
 const { authRouter } = require('./authRouter.js');
 const { asyncHandler, StatusCodeError } = require('../endpointHelper.js');
+const {
+  trackPizzaSuccess,
+  trackPizzaFail,
+} = require("../metrics/metricTypes/pizzaMetrics.js");
 
 const orderRouter = express.Router();
 
@@ -87,9 +91,13 @@ orderRouter.post(
       body: JSON.stringify({ diner: { id: req.user.id, name: req.user.name, email: req.user.email }, order }),
     });
     const j = await r.json();
+    const count = order.items.length;
+    const total = order.items?.reduce((acc, item) => acc + item.price, 0);
     if (r.ok) {
+      trackPizzaSuccess(count, total)
       res.send({ order, reportSlowPizzaToFactoryUrl: j.reportUrl, jwt: j.jwt });
     } else {
+      trackPizzaFail(count, total)
       res.status(500).send({ message: 'Failed to fulfill order at factory', reportPizzaCreationErrorToPizzaFactoryUrl: j.reportUrl });
     }
   })

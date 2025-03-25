@@ -5,10 +5,15 @@ const franchiseRouter = require('./routes/franchiseRouter.js');
 const version = require('./version.json');
 const configImport = require('./config.js');
 // Handle both ES module (with default) and CommonJS formats
+const { trackRequests } = require('./metrics/metricTypes/httpMetrics.js');
+const { periodicallySendMetrics } = require('./metrics/metrics.js');
+const { trackLatency } = require('./metrics/metricTypes/latencyMetrics.js');
 const config = configImport.__esModule ? configImport.default : configImport;
 
 const app = express();
 app.use(express.json());
+app.use(trackLatency);
+app.use(trackRequests);
 app.use(setAuthUser);
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');

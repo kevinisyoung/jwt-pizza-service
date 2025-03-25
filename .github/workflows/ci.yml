@@ -57,7 +57,12 @@ jobs:
                     },
                     factory: {
                       url: 'https://pizza-factory.cs329.click',
-                      apiKey: '2700c77513fd4429b8b442edbf983d2c',
+                      apiKey: ${{ secrets.FACTORY_API_KEY }},
+                    },
+                    metrics: {
+                      source: 'jwt-pizza-service',
+                      url: ${{ secrets.METRICS_URL }},
+                      apiKey: ${{ secrets.METRICS_API_KEY }},
                     },
                   };" > src/config.js
 
