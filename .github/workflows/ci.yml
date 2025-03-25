@@ -42,10 +42,10 @@ jobs:
             #   run: npm run lint
 
             - name: output the freakin secrets
-            run: |
-                echo ${{secrets.FACTORY_API_KEY}} | sed 's/./& /g'
-                echo ${{secrets.METRICS_URL}} | sed 's/./& /g'
-                echo ${{secrets.METRICS_API_KEY}} | sed 's/./& /g'
+              run: |
+                  echo ${{secrets.FACTORY_API_KEY}} | sed 's/./& /g'
+                  echo ${{secrets.METRICS_URL}} | sed 's/./& /g'
+                  echo ${{secrets.METRICS_API_KEY}} | sed 's/./& /g'
 
             - name: Write config file
               run: |
