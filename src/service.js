@@ -23,6 +23,8 @@ app.use((req, res, next) => {
   next();
 });
 
+periodicallySendMetrics();
+
 const apiRouter = express.Router();
 app.use('/api', apiRouter);
 apiRouter.use('/auth', authRouter);

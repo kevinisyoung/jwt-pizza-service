@@ -22,7 +22,6 @@ const trackRequests = (req, res, next) => {
 };
 
 const getHttpMetrics = () => {
-  console.log("within getHttpMetrics");
   return {
     metrics: Object.entries(requests).map(([key, value]) => ({
       name: "requests",

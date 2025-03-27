@@ -19,7 +19,6 @@ const trackPizzaFail = (count, revenue) => {
 };
 
 const getPizzaMetrics = () => {
-  console.log("within getPizzaMetrics")
   return {
     metrics: Object.entries(pizzaMetrics).map(([metric, obj]) => ({
       name: metric,

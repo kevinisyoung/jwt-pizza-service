@@ -37,9 +37,7 @@ class DB {
   }
 
   async addUser(user) {
-    console.log("Trying to add user")
     const connection = await this.getConnection();
-    console.log("Got connection")
     try {
       const hashedPassword = await bcrypt.hash(user.password, 10);
 

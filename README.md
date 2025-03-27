@@ -1,3 +1,9 @@
+//BACKGROUND
+docker rm -fv jwt-pizza-service && docker build -t jwt-pizza-service . && docker run -d  --name jwt-pizza-service -p 80:80 jwt-pizza-service
+
+//FOREGROUND
+docker rm -fv jwt-pizza-service && docker build -t jwt-pizza-service . && docker run --name jwt-pizza-service -p 80:80 jwt-pizza-service
+
 # 🍕 jwt-pizza-service
 
 ![Coverage badge](coverageBadge.svg)

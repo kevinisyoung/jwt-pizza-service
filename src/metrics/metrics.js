@@ -12,6 +12,7 @@ const { getPizzaMetrics } = require("./metricTypes/pizzaMetrics");
 const { getSystemMetrics } = require("./metricTypes/systemMetrics");
 
 const sendMetrics = async () => {
+  console.log("within sendMetrics")
   try {
     const metrics = {
       resourceMetrics: [
@@ -28,11 +29,11 @@ const sendMetrics = async () => {
       ],
     };
 
-    const response = await fetch(config.grafana.url, {
+    const response = await fetch(config.metrics.url, {
       method: "POST",
       body: JSON.stringify(metrics),
       headers: {
-        Authorization: `Bearer ${config.grafana.apiKey}`,
+        Authorization: `Bearer ${config.metrics.apiKey}`,
         "Content-Type": "application/json",
       },
     });

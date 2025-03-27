@@ -42,7 +42,6 @@ authRouter.endpoints = [
 ];
 
 async function setAuthUser(req, res, next) {
-  console.log("config MEOW", config);
   const token = readAuthToken(req);
   if (token) {
     try {
