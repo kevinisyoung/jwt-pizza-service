@@ -2,8 +2,8 @@
 
 trap 'echo "Stopping all processes..."; kill $(jobs -p); exit' SIGINT SIGTERM
 
-host=http://localhost:80
-# host=https://pizza-service.squidward.click
+# host=http://localhost:80
+host=https://pizza-service.squidward.click
 
 (
 while true; do
