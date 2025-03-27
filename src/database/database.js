@@ -65,12 +65,17 @@ class DB {
   async getUser(email, password) {
     const connection = await this.getConnection();
     try {
+      console.log("getting user");
       const userResult = await this.query(connection, `SELECT * FROM user WHERE email=?`, [email]);
+      console.log("user result");
       const user = userResult[0];
+      console.log("user");
       if (!user || !(await bcrypt.compare(password, user.password))) {
+        console.log("user not found");
         trackAuthFail();
         throw new StatusCodeError('unknown user', 404);
       }
+      console.log("user found");
       trackAuthSuccess();
 
       const roleResult = await this.query(connection, `SELECT * FROM userRole WHERE userId=?`, [user.id]);

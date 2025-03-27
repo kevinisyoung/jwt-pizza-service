@@ -25,7 +25,6 @@ done
 while true; do
   response=$(curl -s -X PUT $host/api/auth -d '{"email":"f@jwt.com", "password":"franchisee"}' -H 'Content-Type: application/json')
   token=$(echo $response | jq -r '.token')
-  echo "franchisee token: $token"
   sleep 40
   curl -X DELETE $host/api/auth -H "Authorization: Bearer $token"
   sleep 10
