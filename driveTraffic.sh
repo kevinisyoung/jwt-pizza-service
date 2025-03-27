@@ -23,12 +23,12 @@ done
 
 (
 while true; do
-  echo "AUTHENTICATING"
   response=$(curl -s -X PUT $host/api/auth -d '{"email":"f@jwt.com", "password":"franchisee"}' -H 'Content-Type: application/json')
   token=$(echo $response | jq -r '.token')
-  sleep 15
+  echo "franchisee token: $token"
+  sleep 40
   curl -X DELETE $host/api/auth -H "Authorization: Bearer $token"
-  sleep 5
+  sleep 10
 done
 ) &
 
