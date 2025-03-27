@@ -21,8 +21,8 @@ const trackPizzaFail = (count, revenue) => {
 const getPizzaMetrics = () => {
   return {
     metrics: Object.entries(pizzaMetrics).map(([metric, obj]) => ({
-      name: metric,
-      unit: "1",
+      name: metric === 'revenue' ? 'revenue_amount' : metric,
+      unit: metric === 'revenue' ? "$" : "1",
       sum: {
         dataPoints: Object.entries(obj).map(([status, value]) => ({
           asDouble: value,
@@ -41,7 +41,7 @@ const getPizzaMetrics = () => {
     })),
   };
 };
-
+ 
 module.exports = {
   trackPizzaSuccess,
   trackPizzaFail,
