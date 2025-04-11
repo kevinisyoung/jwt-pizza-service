@@ -15,7 +15,7 @@ const Logger = require("./logging/logger.js");
 const app = express();
 app.use(express.json());
 const logger = new Logger(config);
-app.use(logger.httpLogger);
+app.use((req, res, next) => logger.httpLogger(req, res, next));
 app.use(latencyMetrics);
 app.use(trackRequests);
 app.use(setAuthUser);
