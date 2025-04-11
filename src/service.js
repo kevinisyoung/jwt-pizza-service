@@ -9,7 +9,7 @@ const { periodicallySendMetrics } = require('./metrics/metrics.js');
 const { trackLatency } = require('./metrics/metricTypes/latencyMetrics.js');
 const config = configImport.__esModule ? configImport.default : configImport;
 const { latencyMetrics } = require("./metrics/metricTypes/latencyMetrics.js");
-const { httpMetrics } = require("./metrics/metricTypes/httpMetrics.js");
+const { trackRequests } = require("./metrics/metricTypes/httpMetrics.js");
 const Logger = require("./logging/logger.js");
 
 const app = express();
@@ -17,7 +17,7 @@ app.use(express.json());
 const logger = new Logger(config);
 app.use(logger.httpLogger);
 app.use(latencyMetrics);
-app.use(httpMetrics);
+app.use(trackRequests);
 app.use(setAuthUser);
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
