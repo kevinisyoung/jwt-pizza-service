@@ -9,7 +9,7 @@ const {
   trackPizzaSuccess,
   trackPizzaFail,
 } = require("../metrics/metricTypes/pizzaMetrics.js");
-
+const Logger = require("../logging/logger.js");
 const orderRouter = express.Router();
 
 orderRouter.endpoints = [
@@ -94,6 +94,8 @@ orderRouter.post(
     const count = order.items.length;
     const total = order.items?.reduce((acc, item) => acc + item.price, 0);
     if (r.ok) {
+      const logger = new Logger(config);
+      logger.factoryLogger(order);
       trackPizzaSuccess(count, total)
       res.send({ order, reportSlowPizzaToFactoryUrl: j.reportUrl, jwt: j.jwt });
     } else {

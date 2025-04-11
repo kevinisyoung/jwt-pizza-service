@@ -5,15 +5,19 @@ const franchiseRouter = require('./routes/franchiseRouter.js');
 const version = require('./version.json');
 const configImport = require('./config.js');
 // Handle both ES module (with default) and CommonJS formats
-const { trackRequests } = require('./metrics/metricTypes/httpMetrics.js');
 const { periodicallySendMetrics } = require('./metrics/metrics.js');
 const { trackLatency } = require('./metrics/metricTypes/latencyMetrics.js');
 const config = configImport.__esModule ? configImport.default : configImport;
+const { latencyMetrics } = require("./metrics/metricTypes/latencyMetrics.js");
+const { httpMetrics } = require("./metrics/metricTypes/httpMetrics.js");
+const Logger = require("./logging/logger.js");
 
 const app = express();
 app.use(express.json());
-app.use(trackLatency);
-app.use(trackRequests);
+const logger = new Logger(config);
+app.use(logger.httpLogger);
+app.use(latencyMetrics);
+app.use(httpMetrics);
 app.use(setAuthUser);
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
@@ -58,6 +62,7 @@ app.use('*', (req, res) => {
 // Default error handler for all exceptions and errors.
 app.use((err, req, res, next) => {
   res.status(err.statusCode ?? 500).json({ message: err.message, stack: err.stack });
+  logger.unhandledErrorLogger(err);
   next();
 });
 
