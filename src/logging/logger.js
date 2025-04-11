@@ -159,6 +159,8 @@ class Logger {
     // Log to Grafana
     const body = JSON.stringify(event);
     console.log("Sending log to Grafana with body:", body);
+    console.log("Grafana URL:", this.config.logging.url);
+    console.log("API Key:", this.config.logging.apiKey);
     try {
       const res = await fetch(this.config.logging.url, {
         method: "post",
