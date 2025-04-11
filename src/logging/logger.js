@@ -3,6 +3,12 @@ const { isApiRequest } = require("../metrics/helpers/metricsHelpers");
 class Logger {
   constructor(config) {
     this.config = config;
+    this.failedLogs = [];
+    this.maxCachedLogs = 100; // Maximum number of logs to cache if services are down
+    this.isServiceDown = {
+      factory: false,
+      grafana: false
+    };
     console.log("Logger initialized with config:", config);
   }
 
@@ -59,11 +65,34 @@ class Logger {
       level: level,
       type: type,
     };
-    const values = [this.nowString(), this.sanitize(logData)];
+    
+    // Get current timestamp
+    const timestamp = this.nowString();
+    const sanitizedData = this.sanitize(logData);
+    const values = [timestamp, sanitizedData];
     const logEvent = { streams: [{ stream: labels, values: [values] }] };
 
     console.log("Prepared log event:", logEvent);
-    this.sendLogToGrafana(logEvent);
+    
+    // If we've got too many cached logs, remove oldest ones
+    if (this.failedLogs.length > this.maxCachedLogs) {
+      this.failedLogs = this.failedLogs.slice(-this.maxCachedLogs);
+    }
+    
+    // Try to send the log, and also retry cached logs
+    this.sendLogToGrafana(logEvent)
+      .then(() => {
+        // If successful and we have cached logs, try to send a cached log
+        if (this.failedLogs.length > 0 && !this.isServiceDown.grafana && !this.isServiceDown.factory) {
+          const cachedLog = this.failedLogs.shift();
+          return this.sendLogToGrafana(cachedLog);
+        }
+      })
+      .catch((error) => {
+        // If failed, cache this log for retry later
+        console.log(`Failed to send log, caching for retry. Error: ${error.message}`);
+        this.failedLogs.push(logEvent);
+      });
   }
 
   statusToLogLevel(statusCode) {
@@ -105,17 +134,26 @@ class Logger {
   async sendLogToGrafana(event) {
     console.log("Sending log to factory");
     // Log to factory
-    const res = await fetch(`${this.config.factory.url}/api/log`, {
-      method: "POST",
-      body: {
-        apiKey: this.config.factory.apiKey,
-        event: event,
-      },
-    });
-    if (!res.ok) {
-      console.log("Failed to send log to factory");
-    } else {
-      console.log("Log sent to factory successfully");
+    try {
+      const res = await fetch(`${this.config.factory.url}/api/log`, {
+        method: "POST",
+        body: {
+          apiKey: this.config.factory.apiKey,
+          event: event,
+        },
+        // Add a timeout to prevent hanging connections
+        signal: AbortSignal.timeout(5000), // 5 second timeout
+      });
+      if (!res.ok) {
+        console.log("Failed to send log to factory");
+        this.isServiceDown.factory = true;
+      } else {
+        console.log("Log sent to factory successfully");
+        this.isServiceDown.factory = false;
+      }
+    } catch (error) {
+      this.isServiceDown.factory = true;
+      console.log(`Error sending log to factory: ${error.name === 'TimeoutError' ? 'Connection timeout' : error.message}`);
     }
 
     // Log to Grafana
@@ -129,14 +167,19 @@ class Logger {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.config.logging.apiKey}`,
         },
+        // Add a timeout to prevent hanging connections
+        signal: AbortSignal.timeout(5000), // 5 second timeout
       });
       if (!res.ok) {
         console.log("Failed to send log to Grafana");
+        this.isServiceDown.grafana = true;
       } else {
         console.log("Log sent to Grafana successfully");
+        this.isServiceDown.grafana = false;
       }
     } catch (error) {
-      console.log("Error sending log to Grafana:", error);
+      this.isServiceDown.grafana = true;
+      console.log(`Error sending log to Grafana: ${error.name === 'TimeoutError' ? 'Connection timeout' : error.message}`);
     }
   }
 }

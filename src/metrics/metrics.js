@@ -36,18 +36,34 @@ const sendMetrics = async () => {
         Authorization: `Bearer ${config.metrics.apiKey}`,
         "Content-Type": "application/json",
       },
+      signal: AbortSignal.timeout(5000),
     });
 
     if (!response.ok) {
-      console.error("Failed to push metrics data to Grafana", response);
+      console.error("Failed to push metrics data to Grafana", response.status, response.statusText);
     }
   } catch (error) {
-    console.error("Error pushing metrics:", error);
+    if (error.name === 'TimeoutError') {
+      console.error("Timeout error when sending metrics to Grafana");
+    } else if (error.name === 'TypeError' && error.message.includes('fetch failed')) {
+      console.error("Network error when connecting to Grafana");
+    } else {
+      console.error("Error pushing metrics:", error.message);
+    }
   }
 };
 
 const periodicallySendMetrics = () => {
-  setInterval(sendMetrics, 5000);
+  // Initial delay to allow application to fully initialize
+  setTimeout(() => {
+    // Send metrics once immediately
+    sendMetrics().catch(err => console.error("Error in initial metrics send:", err.message));
+    
+    // Then set up the interval
+    setInterval(() => {
+      sendMetrics().catch(err => console.error("Error in periodic metrics send:", err.message));
+    }, 10000); // Increased to 10 seconds to reduce server load
+  }, 3000); // Wait 3 seconds after startup
 };
 
 module.exports = {
