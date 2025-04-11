@@ -2,7 +2,7 @@ const { sourceAttribute, isApiRequest } = require("../helpers/metricsHelpers");
 
 const requests = {};
 
-const trackRequests = (req, res, next) => {
+const httpMetrics = (req, res, next) => {
   res.on("finish", () => {
     if (!isApiRequest(req)) return;
 
@@ -52,6 +52,6 @@ const getHttpMetrics = () => {
 };
 
 module.exports = {
-  trackRequests,
+  httpMetrics,
   getHttpMetrics,
 };

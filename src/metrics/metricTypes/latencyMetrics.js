@@ -2,6 +2,28 @@ const { sourceAttribute, isApiRequest } = require("../helpers/metricsHelpers");
 
 let latencies = [];
 
+const latencyMetrics = (req, res, next) => {
+  const start = process.hrtime();
+
+  res.on("finish", () => {
+    if (!isApiRequest(req)) return;
+
+    const diff = process.hrtime(start);
+    const durationMs = diff[0] * 1000 + diff[1] / 1e6;
+
+    const factoryCall = req.baseUrl === "/api/order" && req.method === "POST";
+
+    latencies.push({
+      timestamp: Date.now() * 1000000,
+      latency: durationMs,
+      type: factoryCall ? "factory" : "service",
+    });
+  });
+
+  next();
+};
+
+
 const trackLatency = (req, res, next) => {
   const start = process.hrtime();
 
@@ -54,6 +76,6 @@ const getLatencyMetrics = () => {
 };
 
 module.exports = {
-  trackLatency,
+  latencyMetrics,
   getLatencyMetrics,
 };
